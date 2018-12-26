@@ -31,6 +31,28 @@
       [0 255 0] [150 150 150] [200 200 200]
       [255 255 255]]})
 
+(defn create-raindrops [grid]
+  {:colours  []
+   :raindrop [[  0   0   0] [  0   0   0] [  0   0   0] [  0   0   0] [  0   0   0]
+              [  0   0   0] [  0   0   0] [  0  25   0] [  0  50   0] [  0  75   0]
+              [  0 100   0] [  0 125   0] [  0 150   0] [  0 175   0] [  0 200   0]
+              [  0 225   0] [  0 255   0] [205 205 205] [230 230 230] [255 255 255]
+              [  0   0   0] [  0   0   0] [  0   0   0] [  0   0   0] [  0   0   0]
+              [  0   0   0] [  0   0   0] [  0   0   0] [  0   0   0] [  0   0   0]]
+   :speed    1
+   :head     29})
+
+(defn update-raindrops [rd rc]
+  (let [raindrop (:raindrop rd)
+        head     (:head     rd)
+        speed    (:speed    rd)
+        new-head (- head speed)]
+    (if (< new-head rc)
+      (merge rd {:colours []
+                 :head 29})
+      (merge rd {:colours (subvec raindrop (- head rc) head)
+                 :head    new-head}))))
+
 ;;;;;;;;;;;;;;;;
 ;; QUIL Stuff ;;
 ;;;;;;;;;;;;;;;;
@@ -40,24 +62,29 @@
   (let [grid        (create-grid
                      (int (/ (q/height) textsize))
                      (int (/ (q/width) textsize)))
-        colour-grid (create-colour-grid grid)]
+        raindrops   (create-raindrops grid)]
     {:grid        grid
-     :colour-grid colour-grid}))
+     :raindrops   raindrops}))
 
 (defn update-state [state]
-  (assoc-in state [:grid] (nth (iterate update-grid (:grid state)) 20)))
+  (let [grid (:grid state)]
+    (def test-state state)
+    (merge state
+           {:grid      (nth (iterate update-grid grid) 20)
+            :raindrops (update-raindrops (:raindrops state) (rowcount grid))})))
 
 (defn draw-state [state]
   (q/background 0)
   (q/fill 255)
   (q/text-size textsize)
-  (let [grid (:grid state)]
+  (let [grid      (:grid state)
+        raindrops (:raindrops state)]
     (dorun
      (for [row (range (rowcount grid))
            col (range (colcount grid))]
        (do
          (if (= col 0)
-           (let [clr (get-in (:colour-grid state) [col row])]
+           (let [clr (get-in (:colours raindrops) [row])]
              (q/fill (first clr) (second clr) (last clr)))
            (q/fill 255 0 0))
          (q/text (get-in grid [row col]) (* col textsize) (* (inc row) textsize)))))))
