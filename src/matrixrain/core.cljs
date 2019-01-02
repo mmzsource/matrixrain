@@ -8,7 +8,7 @@
 
 
 (def symbols "日二ケチヤホソネリヒヲセメニイヘムレロワスエンハモキヨカナウアノクトフサシオミヌツマルテユラタコ７Ｚ：・．＝＊＋－＜＞")
-(def textsize 10)           ;; integer. must be > 0
+(def textsize 10)
 
 
 ;;;;;;;;;;;;;;;;
@@ -16,9 +16,9 @@
 ;;;;;;;;;;;;;;;;
 
 
-(def framerate 60)          ;; integer. must be > 0
-(def updates-per-second 25) ;; integer. must be > 0
-(def symbol-change-rate 20) ;; integer. must be >= 0
+(def framerate 60)
+(def updates-per-second 25)
+(def symbol-change-rate 20)
 
 
 (defn now [] (.getTime (js/Date.)))
@@ -80,10 +80,7 @@
   (inc (rand-int (* 2 rowcount))))
 
 
-(defn random-drop-speed
-  "random speed within bounds to make the animation visually attractive"
-  []
-  (+ 0.7 (rand 0.9)))
+(defn random-drop-speed [] (+ 0.7 (rand 0.9)))
 
 
 (defn create-raindrop [rowcount]

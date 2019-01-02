@@ -8,7 +8,7 @@
                  [org.clojure/clojurescript "1.10.439"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]
-            [lein-figwheel "0.5.15"]]
+            [lein-figwheel "0.5.16"]]
   :hooks [leiningen.cljsbuild]
 
   :profiles {:dev {:dependencies [[cider/piggieback "0.3.10"]
@@ -35,4 +35,5 @@
               :output-to "resources/public/js/main.js"
               :output-dir "resources/public/js/optimized"
               :asset-path "js/optimized"
-              :optimizations :advanced}}]})
+              :optimizations :advanced
+              :closure-output-charset "iso-8859-1"}}]})
