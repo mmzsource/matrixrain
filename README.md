@@ -35,6 +35,26 @@ repository on GitHub](https://github.com/bhauman/lein-figwheel).
 You can stop the REPL (and the connection with the browser) by evaluating this:
 `:repl/quit`
 
+## Testing
+
+The project is using [lein doo](https://github.com/bensu/doo) to run tests on
+save. In `project.clj`, `:doo` is configured to look at the "test" build and use
+phantomjs to run the tests in a headless environment. Therefore, you need to
+have phantomjs installed:
+
+``` bash
+brew tap homebrew/cask
+brew cask install phantomjs
+```
+
+(The `lein doo` documentation describes how to use a different js-env if you
+don't want to use phantomjs).
+
+Next, make sure the tests run-on-save by executing `lein doo` from a terminal.
+
+The :doo config in `project.clj` points to the "test" build, which configures
+which runner doo should use and which js-env is the default.
+
 ## Publishing
 
 Run `lein do clean, cljsbuild once optimized`.

@@ -8,7 +8,8 @@
                  [org.clojure/clojurescript "1.10.439"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]
-            [lein-figwheel "0.5.16"]]
+            [lein-figwheel "0.5.16"]
+            [lein-doo "0.1.10"]]
   :hooks [leiningen.cljsbuild]
 
   :profiles {:dev {:dependencies [[cider/piggieback "0.3.10"]
@@ -17,6 +18,10 @@
                    :repl-options {:nrepl-middleware [cider.piggieback/wrap-cljs-repl]}}}
 
   :clean-targets ^{:protect false} ["resources/public/js"]
+
+  :doo {:build "test"
+        :alias {:default [:phantom]}}
+
   :cljsbuild
   {:builds [; development build with figwheel hot swap
             {:id "development"
@@ -27,6 +32,12 @@
               :output-to "resources/public/js/main.js"
               :output-dir "resources/public/js/development"
               :asset-path "js/development"}}
+            ; test build
+            {:id "test"
+             :source-paths ["src" "test"]
+             :compiler {:main "matrixrain.runner"
+                        :output-to "resources/public/js/testable.js"
+                        :optimizations :none}}
             ; minified and bundled build for deployment
             {:id "optimized"
              :source-paths ["src"]
